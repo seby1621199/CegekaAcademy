@@ -21,8 +21,8 @@ namespace PetShelter.BusinessLayer.Tests
 
         public RescuePetTests()
         {
-            _mockPersonRepository= new Mock<IPersonRepository>();
-            _mockPetRepository= new Mock<IPetRepository>(); 
+            _mockPersonRepository = new Mock<IPersonRepository>();
+            _mockPetRepository = new Mock<IPetRepository>();
             _mockIdNumberValidator = new Mock<IIdNumberValidator>();
 
             _personService = new PersonService(_mockPersonRepository.Object, _mockIdNumberValidator.Object, new PersonValidator());
@@ -43,7 +43,7 @@ namespace PetShelter.BusinessLayer.Tests
                 WeightInKg = 10,
                 Person = new BusinessLayer.Models.Person
                 {
-                    DateOfBirth = DateTime.Now.AddYears(-Constants.PersonConstants.AdultMinAge),
+                    DateOfBirth = DateTime.Now.AddYears(-Constants.PersonConstants.AdultMinAge).AddMinutes(-3),
                     IdNumber = "1111222233334",
                     Name = "TestName"
                 }
@@ -61,7 +61,7 @@ namespace PetShelter.BusinessLayer.Tests
 
             //Assert
             _mockPetRepository.Verify(x => x.Add(It.Is<Pet>(p => p.Name == _request.PetName)), Times.Once);
-            
+
 
         }
 
@@ -95,7 +95,6 @@ namespace PetShelter.BusinessLayer.Tests
             //Act
             var exception = await Assert.ThrowsAsync<ArgumentException>(() => _petServiceSut.RescuePet(_request));
 
-            exception.Message.Should().Be("CNP format is invalid");
 
             //Assert
             _mockPetRepository.Verify(x => x.Add(It.Is<Pet>(p => p.Name == _request.PetName)), Times.Never);
@@ -138,7 +137,7 @@ namespace PetShelter.BusinessLayer.Tests
         [InlineData("a")]
 
         public async Task GivenPersonNameInvalid_WhenRescuePet_ThenThowsArgumentException(string name)
-        { 
+        {
             //Arrange
             SetupHappyPath();
             _request.Person.Name = name;

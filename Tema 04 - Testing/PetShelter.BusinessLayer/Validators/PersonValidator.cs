@@ -10,5 +10,6 @@ public class PersonValidator: AbstractValidator<Person>
     {
         RuleFor(x => x.IdNumber).Length(PersonConstants.IdNumberLength);
         RuleFor(x => x.Name).NotEmpty().MinimumLength(PersonConstants.NameMinLength);
+        RuleFor(x => x.DateOfBirth).LessThan(DateTime.Now.AddYears(-Constants.PersonConstants.AdultMinAge));
     }
 }

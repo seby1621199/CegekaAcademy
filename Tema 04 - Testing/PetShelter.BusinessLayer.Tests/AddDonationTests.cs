@@ -17,13 +17,18 @@ public class AddDonationTests
 
         var request = new AddDonationRequest
         {
-            Amount = 10
+            Amount = 10,
+            Person = new BusinessLayer.Models.Person
+            {
+                DateOfBirth = DateTime.Now.AddYears(-Constants.PersonConstants.AdultMinAge).AddMinutes(-3),
+                IdNumber = "1111222233334",
+                Name = "TestName"
+            }
         };
         await donationServiceSut.AddDonation(request);
 
         mockDonationRepository.Verify(x => x.Add(It.Is<Donation>(d => d.Amount == request.Amount)), Times.Once);
     }
-    //
 
     [Fact]
     public async Task GivenRequestWithMissingAmount_WhenAddDonation_DonationIsNotAdded()
@@ -36,6 +41,7 @@ public class AddDonationTests
 
         mockDonationRepository.Verify(x => x.Add(It.IsAny<Donation>()), Times.Never);
     }
+    //
 
     [Fact]
     public async Task GivenRequestWIthNegativeAmount_WhenAddDonation_DonationIsNotAdded()
@@ -45,11 +51,11 @@ public class AddDonationTests
 
         var request = new AddDonationRequest
         {
-            Amount = -700
+            Amount = -70
         };
         await Assert.ThrowsAsync<ArgumentException>(() => donationServiceSut.AddDonation(request));
 
-        mockDonationRepository.Verify(x => x.Add(It.IsAny<Donation>()), Times.Never);   
+        mockDonationRepository.Verify(x => x.Add(It.IsAny<Donation>()), Times.Never);
     }
 
     [Theory]
@@ -73,6 +79,7 @@ public class AddDonationTests
         mockDonationRepository.Verify(x => x.Add(It.IsAny<Donation>()), Times.Never);
     }
 
+
     [Fact]
     public async Task GivenRequestWithWrongPersonIdNumber_WhenAddDonation_DonationIsNotAdded()
     {
@@ -84,8 +91,8 @@ public class AddDonationTests
             Amount = 700,
             Person = new BusinessLayer.Models.Person
             {
-                IdNumber= "902906",
-                Name="salut"
+                IdNumber = "902906",
+                Name = "salut"
             }
         };
         await Assert.ThrowsAsync<ArgumentException>(() => donationServiceSut.AddDonation(request));
@@ -104,9 +111,9 @@ public class AddDonationTests
             Amount = 700,
             Person = new BusinessLayer.Models.Person
             {
-                IdNumber = "1941129021906",
-                Name = "salutt",
-                DateOfBirth=DateTime.Now
+                DateOfBirth = DateTime.Now.AddYears(-Constants.PersonConstants.AdultMinAge + 3),
+                IdNumber = "1161222233335",
+                Name = "TestName"
             }
         };
         await Assert.ThrowsAsync<ArgumentException>(() => donationServiceSut.AddDonation(request));
@@ -114,12 +121,5 @@ public class AddDonationTests
         mockDonationRepository.Verify(x => x.Add(It.IsAny<Donation>()), Times.Never);
 
     }
-
-
-
-
-
-
-
 
 }

@@ -17,11 +17,11 @@ public class DonationService
     public async Task AddDonation(AddDonationRequest addDonationRequest)
     {
         var validationResult = _donationValidator.Validate(addDonationRequest);
-        if (!validationResult.IsValid) { throw new ArgumentException(); }
+        if(!validationResult.IsValid) { throw new ArgumentException(); }
 
         await _donationRepository.Add(new DataAccessLayer.Models.Donation
         {
-            Amount = addDonationRequest.Amount
+            Amount= addDonationRequest.Amount
         });
     }
 }
