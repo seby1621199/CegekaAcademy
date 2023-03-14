@@ -4,10 +4,10 @@ namespace PetShelter.Domain.Extensions.DomainModel
 {
     public static class FundraiserExtensions
     {
-        public static FundraiserSummaryinformation ToFundraiserInfoAll(this DataAccessLayer.Models.Fundraiser fundraiser)
+        public static FundraiserSummaryInformation ToFundraiserInfoAll(this DataAccessLayer.Models.Fundraiser fundraiser)
         {
             return
-                new FundraiserSummaryinformation
+                new FundraiserSummaryInformation
                 {
                     Id = fundraiser.Id,
                     Name = fundraiser.Name,

@@ -1,9 +1,9 @@
 ﻿namespace PetShelter.Domain
 {
-    public class FundraiserSummaryinformation
+    public class FundraiserSummaryInformation
     {
-        public int Id;
-        public string Name;
-        public string Status;
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Status { get; set; }
     }
 }

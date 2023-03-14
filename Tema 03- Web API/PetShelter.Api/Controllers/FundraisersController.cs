@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PetShelter.Api.Resources.Extensions;
+using PetShelter.Domain;
 using PetShelter.Domain.Services;
+using System.Collections.Immutable;
 using System.ComponentModel.DataAnnotations;
 
 namespace PetShelter.Api.Controllers
@@ -15,6 +17,7 @@ namespace PetShelter.Api.Controllers
         {
             this._fundraiserService = fundraiserService;
         }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -30,10 +33,10 @@ namespace PetShelter.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<IReadOnlyList<Domain.FundraiserSummaryinformation>>> GetFundraisers()
+        public async Task<ActionResult<IReadOnlyList<FundraiserSummaryInformation>>> GetFundraisers()
         {
             var data = await this._fundraiserService.GetFundraisersAsync();
-            return this.Ok(data);
+            return this.Ok(data.ToImmutableArray());
         }
 
         [HttpGet("{id}")]
@@ -55,16 +58,12 @@ namespace PetShelter.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Domain.FundraiserInformation>> Donate(int id, [FromBody] Api.Resources.Person person, [Required] int amount)
+        public async Task<ActionResult<Domain.FundraiserInformation>> Donate(int id, [FromBody] Resources.Person person, [Required] int amount)
         {
             var fundraiser = await this._fundraiserService.GetFundraiser(id);
             if (fundraiser is null)
             {
                 return this.NotFound();
-            }
-            if (amount <= 0)
-            {
-                return this.BadRequest();
             }
             if (fundraiser.AmountDonated >= fundraiser.Target || fundraiser.Target.Equals("Ended"))
                 return this.BadRequest("Ended");

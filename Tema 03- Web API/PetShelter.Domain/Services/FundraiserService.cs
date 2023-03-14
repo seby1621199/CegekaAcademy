@@ -42,7 +42,7 @@ namespace PetShelter.Domain.Services
             return fundraisernew.Id;
         }
 
-        public async Task<IReadOnlyCollection<FundraiserSummaryinformation>> GetFundraisersAsync()
+        public async Task<IReadOnlyCollection<FundraiserSummaryInformation>> GetFundraisersAsync()
         {
             var fundraisers = await _fundraiserRepository.GetAll();
             return fundraisers.Select(p => p.ToFundraiserInfoAll())

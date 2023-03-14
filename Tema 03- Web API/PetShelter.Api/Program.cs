@@ -2,6 +2,7 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Converters;
+using PetShelter.Api.SwaggerHelper;
 using PetShelter.DataAccessLayer;
 using PetShelter.DataAccessLayer.Repository;
 using PetShelter.Domain.Services;
@@ -38,7 +39,8 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-    options.CustomSchemaIds(type => type.ToString());
+    var schemaHelper = new SwashbuckleSchemaHelper();
+    options.CustomSchemaIds(type => schemaHelper.GetSchemaId(type));
 });
 
 var app = builder.Build();

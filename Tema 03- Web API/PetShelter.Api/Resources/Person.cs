@@ -1,4 +1,6 @@
-﻿namespace PetShelter.Api.Resources
+﻿using Newtonsoft.Json;
+
+namespace PetShelter.Api.Resources
 {
     public class Person
     {
