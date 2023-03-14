@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PetShelter.DataAccessLayer;
 
@@ -11,9 +12,11 @@ using PetShelter.DataAccessLayer;
 namespace PetShelter.DataAccessLayer.Migrations
 {
     [DbContext(typeof(PetShelterContext))]
-    partial class PetShelterContextModelSnapshot : ModelSnapshot
+    [Migration("20230217110541_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,42 +39,11 @@ namespace PetShelter.DataAccessLayer.Migrations
                     b.Property<int>("DonorId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("FundraiserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("DonorId");
 
-                    b.HasIndex("FundraiserId");
-
                     b.ToTable("Donations");
-                });
-
-            modelBuilder.Entity("PetShelter.DataAccessLayer.Models.Fundraiser", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<int>("Target")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Fundraiser");
                 });
 
             modelBuilder.Entity("PetShelter.DataAccessLayer.Models.Person", b =>
@@ -167,13 +139,7 @@ namespace PetShelter.DataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PetShelter.DataAccessLayer.Models.Fundraiser", "Fundraiser")
-                        .WithMany("Donations")
-                        .HasForeignKey("FundraiserId");
-
                     b.Navigation("Donor");
-
-                    b.Navigation("Fundraiser");
                 });
 
             modelBuilder.Entity("PetShelter.DataAccessLayer.Models.Pet", b =>
@@ -189,11 +155,6 @@ namespace PetShelter.DataAccessLayer.Migrations
                     b.Navigation("Adopter");
 
                     b.Navigation("Rescuer");
-                });
-
-            modelBuilder.Entity("PetShelter.DataAccessLayer.Models.Fundraiser", b =>
-                {
-                    b.Navigation("Donations");
                 });
 
             modelBuilder.Entity("PetShelter.DataAccessLayer.Models.Person", b =>

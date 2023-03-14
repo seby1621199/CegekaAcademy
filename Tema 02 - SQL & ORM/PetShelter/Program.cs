@@ -12,7 +12,7 @@ FundraiserRepository FundraiserRepository = new FundraiserRepository(context);
 app.MapGet("/", () =>
 {
     //return DonationRepository.GetPeopleDonors();
-    return FundraiserRepository.GetTotalAmount(2); 
+    return FundraiserRepository.GetTotalAmount(1); 
 });
 
 
